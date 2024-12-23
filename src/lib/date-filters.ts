@@ -1,6 +1,4 @@
-interface Activity {
-  timestampNum: number
-}
+import { Activity } from "@/types"
 
 export function filterDataByDate(activities: Activity[], filterType: string) {
   const now = new Date()

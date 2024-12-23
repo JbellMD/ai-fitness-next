@@ -17,6 +17,7 @@ import {
 } from "chart.js"
 import { Card } from "./ui/card"
 import { Skeleton } from "./ui/skeleton"
+import { Activity } from "@/types"
 
 ChartJS.register(
   CategoryScale,
@@ -27,12 +28,6 @@ ChartJS.register(
   Tooltip,
   Legend
 )
-
-interface Activity {
-  activity: string
-  duration: number
-  timestamp: string
-}
 
 export function Insights() {
   const [activities, setActivities] = useState<Activity[]>([])

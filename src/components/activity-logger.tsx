@@ -27,22 +27,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select"
+import { Activity, ActivityFormData } from "@/types"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
-
-interface ActivityFormData {
-  activity: string
-  duration: string
-  intensity: string
-}
-
-interface Activity {
-  activity: string
-  duration: number
-  intensity: string
-  timestamp: string
-  timestampNum: number
-}
 
 export function ActivityLogger() {
   const { register, handleSubmit, reset } = useForm<ActivityFormData>()
@@ -58,7 +45,13 @@ export function ActivityLogger() {
     onValue(activitiesRef, (snapshot) => {
       const data = snapshot.val()
       if (data) {
-        const fetchedActivities = Object.values(data) as Activity[]
+        const fetchedActivities = Object.values(data).map((item: any) => ({
+          activity: item.activity,
+          duration: Number(item.duration),
+          intensity: item.intensity,
+          timestamp: item.timestamp || new Date().toISOString(),
+          timestampNum: item.timestampNum || Date.now()
+        })) as Activity[]
         setAllActivities(fetchedActivities)
       } else {
         setAllActivities([])
@@ -105,7 +98,7 @@ export function ActivityLogger() {
 
   const onSubmit = async (data: ActivityFormData) => {
     try {
-      const newActivity = {
+      const newActivity: Activity = {
         activity: data.activity,
         duration: parseInt(data.duration, 10),
         intensity: data.intensity,
