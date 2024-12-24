@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { motion } from "framer-motion"
 import { Bar } from "react-chartjs-2"
 import {
@@ -32,7 +32,13 @@ import { Activity, ActivityFormData } from "@/types"
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export function ActivityLogger() {
-  const { register, handleSubmit, reset } = useForm<ActivityFormData>()
+  const { control, handleSubmit, reset } = useForm<ActivityFormData>({
+    defaultValues: {
+      activity: "",
+      duration: "",
+      intensity: "",
+    },
+  })
   const [successMessage, setSuccessMessage] = useState("")
   const [chartData, setChartData] = useState<any>(null)
   const [allActivities, setAllActivities] = useState<Activity[]>([])
@@ -122,43 +128,63 @@ export function ActivityLogger() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="activity">Activity Type</Label>
-            <Select {...register("activity")} required>
-              <SelectTrigger>
-                <SelectValue placeholder="Select an activity" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="running">Running</SelectItem>
-                <SelectItem value="yoga">Yoga</SelectItem>
-                <SelectItem value="weightlifting">Weightlifting</SelectItem>
-                <SelectItem value="swimming">Swimming</SelectItem>
-                <SelectItem value="pilates">Pilates</SelectItem>
-              </SelectContent>
-            </Select>
+            <Controller
+              name="activity"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an activity" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="running">Running</SelectItem>
+                    <SelectItem value="yoga">Yoga</SelectItem>
+                    <SelectItem value="weightlifting">Weightlifting</SelectItem>
+                    <SelectItem value="swimming">Swimming</SelectItem>
+                    <SelectItem value="pilates">Pilates</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="duration">Duration (minutes)</Label>
-            <Input
-              type="number"
-              id="duration"
-              {...register("duration")}
-              required
-              min="1"
+            <Controller
+              name="duration"
+              control={control}
+              rules={{ required: true, min: 1 }}
+              render={({ field }) => (
+                <Input
+                  type="number"
+                  id="duration"
+                  {...field}
+                  min="1"
+                />
+              )}
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="intensity">Intensity Level</Label>
-            <Select {...register("intensity")} required>
-              <SelectTrigger>
-                <SelectValue placeholder="Select intensity" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="low">Low</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="high">High</SelectItem>
-              </SelectContent>
-            </Select>
+            <Controller
+              name="intensity"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select intensity" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
 
           <Button type="submit" className="w-full">

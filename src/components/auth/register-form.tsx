@@ -41,70 +41,78 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="p-6 w-full max-w-sm mx-auto">
-      <div className="flex justify-center mb-6">
-        <Icons.dumbbellLogo className="h-12 w-12" />
+    <Card className="p-8 w-full max-w-md mx-auto shadow-lg">
+      <div className="flex flex-col items-center space-y-4 mb-8">
+        <Icons.dumbbellLogo className="h-16 w-16" />
+        <h1 className="text-3xl font-bold text-center">Create Account</h1>
+        <p className="text-sm text-muted-foreground text-center">
+          Enter your details to create a new account
+        </p>
       </div>
-      <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium">Email</Label>
           <Input
             id="email"
             type="email"
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="w-full"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-sm font-medium">Password</Label>
           <Input
             id="password"
             type="password"
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirm-password">Confirm Password</Label>
+          <Label htmlFor="confirm-password" className="text-sm font-medium">Confirm Password</Label>
           <Input
             id="confirm-password"
             type="password"
             placeholder="Confirm your password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full"
             required
           />
         </div>
 
         {error && (
-          <div className="text-sm text-destructive text-center">{error}</div>
+          <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md text-center">
+            {error}
+          </div>
         )}
 
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button type="submit" className="w-full h-11 text-base" disabled={loading}>
           {loading && (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            <Icons.spinner className="mr-2 h-5 w-5 animate-spin" />
           )}
-          Sign Up
+          Create Account
         </Button>
 
-        <p className="text-sm text-center text-muted-foreground">
+        <div className="text-sm text-center text-muted-foreground">
           Already have an account?{" "}
           <Button
             variant="link"
-            className="p-0 h-auto font-normal"
+            className="pl-1 font-medium"
             onClick={() => router.push("/login")}
           >
             Sign in
           </Button>
-        </p>
+        </div>
       </form>
     </Card>
   )

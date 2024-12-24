@@ -1,21 +1,24 @@
-"use client"
+"use client";
 
-import { useAuthState } from "react-firebase-hooks/auth"
-import { auth } from "@/lib/firebase"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription } from "@/components/ui/card"
-import { useRouter } from "next/navigation"
-import { signOut } from "firebase/auth"
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/lib/firebase";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { RegisterForm } from "@/components/auth/register-form";
+import { useState } from "react";
 
 export default function Home() {
-  const [user, loading] = useAuthState(auth)
-  const router = useRouter()
+  const [user, loading] = useAuthState(auth);
+  const router = useRouter();
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
 
   const handleSignOut = async () => {
-    await signOut(auth)
-    router.push("/login")
-  }
+    await signOut(auth);
+    router.push("/login");
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -23,9 +26,7 @@ export default function Home() {
         <div className="container flex h-14 items-center">
           <div className="mr-4 flex">
             <a className="mr-6 flex items-center space-x-2" href="/">
-              <span className="font-bold sm:inline-block">
-                AI Fitness Tracker
-              </span>
+              <span className="font-bold sm:inline-block">AI Fitness Tracker</span>
             </a>
           </div>
           <nav className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
@@ -47,13 +48,22 @@ export default function Home() {
                   </Button>
                 </>
               ) : (
-                <Button
-                  variant="ghost"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60"
-                  onClick={() => router.push("/login")}
-                >
-                  Login
-                </Button>
+                <>
+                  <Button
+                    variant="ghost"
+                    className="transition-colors hover:text-foreground/80 text-foreground/60"
+                    onClick={() => router.push("/login")}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="transition-colors hover:text-foreground/80 text-foreground/60"
+                    onClick={() => setShowRegisterForm(!showRegisterForm)}
+                  >
+                    Register
+                  </Button>
+                </>
               )}
               <ThemeToggle />
             </div>
@@ -74,11 +84,21 @@ export default function Home() {
                 <Button onClick={() => router.push("/login")} size="lg">
                   Get Started
                 </Button>
+                <Button onClick={() => setShowRegisterForm(!showRegisterForm)} size="lg">
+                  Register Now
+                </Button>
               </div>
             )}
           </div>
         </section>
+        {showRegisterForm && (
+          <section className="flex items-center justify-center py-12">
+            <div className="container flex flex-col items-center justify-center">
+              <RegisterForm />
+            </div>
+          </section>
+        )}
       </main>
     </div>
-  )
+  );
 }

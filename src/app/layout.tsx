@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
+import { MainNav } from '@/components/main-nav'
+import { Providers } from '@/components/providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AI Fitness Tracker',
-  description: 'Track your fitness journey with AI-powered insights',
+  title: 'AI Fitness - Smart Workout Tracking',
+  description: 'Track your workouts and get personalized insights with AI',
 }
 
 export default function RootLayout({
@@ -18,14 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <Providers>
+          <div className="relative flex min-h-screen flex-col">
+            <MainNav />
+            <div className="flex-1">{children}</div>
+          </div>
+        </Providers>
       </body>
     </html>
   )
